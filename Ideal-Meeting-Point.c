@@ -6,9 +6,10 @@ int s;
 int n;
 
 struct feild {
-        int xxx;
+        int coordinate;
         int count;
     };
+
 void mergesort(struct feild a[],int i,int j);
 void merge(struct feild a[],int min1,int max1,int min2,int max2);
 
@@ -18,9 +19,9 @@ void mergesort(struct feild a[],int i,int j)
     if(i<j)
     {
         mid=(i+j)/2;
-        mergesort(a,i,mid);        //left recursion
-        mergesort(a,mid+1,j);    //right recursion
-        merge(a,i,mid,mid+1,j);    //merging of two sorted sub-arrays
+        mergesort(a,i,mid);        
+        mergesort(a,mid+1,j);    
+        merge(a,i,mid,mid+1,j);    
     }
 }
  
@@ -30,44 +31,43 @@ void merge(struct feild a[],int min1,int max1,int min2,int max2)
     
     struct feild temp[n];
 
-    i=min1;    //beginning of the first list
-    j=min2;    //beginning of the second list
+    i=min1;    
+    j=min2;    
     k=0;
     
-    while(i<=max1 && j<=max2)    //while elements in both lists
+    while(i<=max1 && j<=max2)  
     {
-        if(a[i].xxx<a[j].xxx) {
-            temp[k].xxx=a[i].xxx;
+        if(a[i].coordinate<a[j].coordinate) {
+            temp[k].coordinate=a[i].coordinate;
             temp[k++].count=a[i++].count;
         }
         else {
-            temp[k].xxx=a[j].xxx;
+            temp[k].coordinate=a[j].coordinate;
             temp[k++].count=a[j++].count;
         }
     }
     
-    while(i<=max1) {    //copy remaining elements of the first list
-        temp[k].xxx=a[i].xxx;
+    while(i<=max1) {    
+        temp[k].coordinate=a[i].coordinate;
         temp[k++].count=a[i++].count;
     }
         
-    while(j<=max2) {   //copy remaining elements of the second list
-        temp[k].xxx=a[j].xxx;
+    while(j<=max2) {
+        temp[k].coordinate=a[j].coordinate;
         temp[k++].count=a[j++].count;
     }
         
-    //Transfer elements from temp[] back to a[]
     for(i=min1,j=0;i<=max2;i++,j++) {
-        a[i].xxx=temp[j].xxx;
+        a[i].coordinate=temp[j].coordinate;
         a[i].count=temp[j].count;
     }
 }
 int getBest(struct feild arr[], int size, long long int total){
     total = total/2;
-    for(int xx = 0; xx<size; xx++){
-        total = total - arr[xx].count;
+    for(int x = 0; x<size; x++){
+        total = total - arr[x].count;
         if(total < 0){
-            return arr[xx].xxx;
+            return arr[x].coordinate;
         }
     }
 }
@@ -75,20 +75,19 @@ int getBest(struct feild arr[], int size, long long int total){
 int main() {
     
     long long int totalPeople = 0;
-    //FILE *myFile;
-    //myFile = fopen("C://cisla.in", "r");
     scanf("%d %d %d", &r, &s, &n);
     struct feild osaX[n];
     struct feild osaY[n];
-    //nuluju arrays
+
     for(int z=0; z<n; z++){
-        osaX[z].xxx = 0;
+        osaX[z].coordinate = 0;
         osaX[z].count = 0;
-        osaY[z].xxx = 0;
+        osaY[z].coordinate = 0;
         osaY[z].count = 0;
     }
     
     int c = 0;
+
     for(int m = 0; m<n; m++){
         int x;
         int y ;
@@ -96,8 +95,8 @@ int main() {
         
         scanf("%d %d %d", &x, &y, &num);
         if(num>0){
-            osaX[c].xxx = x;
-            osaY[c].xxx = y;
+            osaX[c].coordinate = x;
+            osaY[c].coordinate = y;
             osaX[c].count = num;
             osaY[c].count = num;
             c++;
@@ -106,31 +105,10 @@ int main() {
         
         
     }
-   
-    //bruteforcing best score
-    /*for (int i = 0; i <r; i++){
-       result += i*osaX[i]; 
-       distance = 0;
-       for(int j = 0; j<r; j++){
-        distance += abs((j-i)*osaX[j]);   
-       } 
-       
-       if(bestScore > distance){
-           bestScore = distance;
-           bestI = i;
-       }
-      
-       printf("%d-", i);
-       printf("%d ", osaX[i]);
-    }*/
     
     mergesort(osaX, 0, n-1);
     mergesort(osaY, 0, n-1);
-    
-    /*for(int t = 0; t<n; t++){
-        printf("%d-%d", osaY[t].xxx, osaY[t].count);
-        printf("%s ", "end");
-    }*/
+   
     int resX;
     resX = getBest(osaX, n, totalPeople);
     int resY;
